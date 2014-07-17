@@ -1,14 +1,27 @@
 CmsApp::Application.routes.draw do
   resources :questions
-
-
   resources :quizzes
-
-
-  resources :courses
-
+  resources :courses  do
+    member do
+      get :students, :quizzes
+    end
+  end
 
   resources :users
+  resources :sessions, only: [:new, :create, :destroy]
+  resources :registrations, only: [:create, :destroy]
+
+  root to: 'static_pages#home'
+
+  match '/signup', to: 'users#new'
+  match '/signin', to: 'sessions#new'
+  match '/signout', to: 'sessions#destroy', via: :delete
+  match '/new_prof', to: 'users#new_prof'
+  match '/create_prof', to: 'users#create_prof'
+  match '/new_course' , to: 'users#new_course'
+  match '/create_course', to: 'users#create_course'
+  match '/courses/new', to: 'users#new_course'
+
 
 
   # The priority is based upon order of creation:

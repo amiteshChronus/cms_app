@@ -6,5 +6,6 @@ class CreateRegistrations < ActiveRecord::Migration
 
       t.timestamps
     end
+
   end
 end

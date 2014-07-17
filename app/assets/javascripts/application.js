@@ -13,3 +13,19 @@
 //= require jquery
 //= require jquery_ujs
 //= require_tree .
+//= require bootstrap
+
+
+function remove_fields(link) {
+	jQuery(link).parent().remove()
+  // jQuery(link).prev("input[type=hidden]").value = "1";
+  // jQuery(link).up(".fields").hide();
+}
+
+function add_fields(link, association, content) {
+  var new_id = new Date().getTime();
+  var regexp = new RegExp("new_" + association, "g");
+  jQuery(link).closest(".fields").append(
+    content.replace(regexp, new_id)
+  );
+}

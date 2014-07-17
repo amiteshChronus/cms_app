@@ -1,11 +1,12 @@
+<% @quizzes.each do |quiz|%>
 <p id="notice"><%= notice %></p>
 
 <p>
   <b>Name:</b>
-  <%= @quiz.name %>
+  <%= quiz.name %>
 </p>
 <ol>
-<% for question in @quiz.questions %>
+<% for question in quiz.questions %>
 	<li> <%= question.content%></li>
 	<ul>
 	<% for option in question.options %>
@@ -19,6 +20,7 @@
 
 
 
-<%= link_to 'Edit', edit_quiz_path(@quiz) %> |
-<%= link_to 'Destroy', @quiz, :confirm => 'Are you sure?', :method => :delete %> |
+<%= link_to 'Edit', edit_quiz_path(quiz) %> |
+<%= link_to 'Destroy', quiz, :confirm => 'Are you sure?', :method => :delete %> |
 <%= link_to 'Back', quizzes_path %>
+<% end %>

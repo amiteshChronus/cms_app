@@ -1,20 +1,17 @@
 <p id="notice"><%= notice %></p>
 
-<p>
-  <b>Name:</b>
-  <%= @course.name %>
-</p>
+<table>
+	<tr>
+		<td>
+			<h1><%= @course.name %></h1>
+		</td>
+		<td>
+		</td>
+ 		<td>
+ 			<h3><%= link_to '(Edit)', edit_course_path(@course) %></h3>
+ 		</td>	 
+</table>
+<a href="<%= students_course_path(@course) %>"> Students(   <%= @course.students.count %> ) </a> |
+<!-- <a href="<%= quizzes_course_path(:id => @course.id) %>"> Quizzes(   <%= @course.quizzes.count %> ) </a> -->
+<%= link_to("Quizzes(#{@course.quizzes.count})",quizzes_course_path(:id => @course.id))%>
 
-<p>
-  <b>Description:</b>
-  <%= @course.description %>
-</p>
-
-<p>
-  <b>Instructor:</b>
-  <%= @course.instructor_id %>
-</p>
-
-
-<%= link_to 'Edit', edit_course_path(@course) %> |
-<%= link_to 'Back', courses_path %>

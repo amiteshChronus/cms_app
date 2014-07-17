@@ -9,19 +9,29 @@
       </ul>
     </div>
   <% end %>
+<%= form_for(@quiz) do |f| %>
 
-<%= form_for @quiz, :url => quizzes_path(:course_id => @course_id) do |f| %>
   <div class="field">
-    <p>
-      <%= f.label :name %><br />
-      <%= f.text_field :name %>
-    </p>
-    <%= f.fields_for :questions do |builder| %>
-      <%= render "question_fields", :f => builder %>
-    <% end %>
 
-    <p class="fields"><%= link_to_add_fields "Add Question", f, :questions %></p>
+  <p>
+    <%= f.label :name %><br />
+    <%= f.text_field :name %>
+  </p>
+  
+
+  <%= f.fields_for :questions do |builder| %>
+    <%= render "question_fields", :f => builder %>
+  <% end %>
+
+  <p><%= link_to_add_fields "Add Question", f, :questions %></p>
   </div>
+
+
+
+
+
+
+
   <div class="actions">
     <%= f.submit %>
   </div>

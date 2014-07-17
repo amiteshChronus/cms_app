@@ -2,8 +2,17 @@ class CoursesController < ApplicationController
   # GET /courses
   # GET /courses.json
   def index
-    @courses = Course.all
-
+    @current_user=current_user
+    if isAdmin?
+      @courses = Course.all
+    elsif isProf?
+      @courses= @current_user.offered_courses
+    elsif isStudnet?
+      @courses= @current_user.registered_courses
+    else
+      redirect_to root_url
+    end
+      
     respond_to do |format|
       format.html # index.html.erb
       format.json { render json: @courses }
@@ -14,7 +23,6 @@ class CoursesController < ApplicationController
   # GET /courses/1.json
   def show
     @course = Course.find(params[:id])
-
     respond_to do |format|
       format.html # show.html.erb
       format.json { render json: @course }
@@ -24,7 +32,7 @@ class CoursesController < ApplicationController
   # GET /courses/new
   # GET /courses/new.json
   def new
-    @course = Course.new
+    @course = current_user.courses.build
 
     respond_to do |format|
       format.html # new.html.erb
@@ -80,4 +88,22 @@ class CoursesController < ApplicationController
       format.json { head :no_content }
     end
   end
+
+
+  def students
+    @title= "Registered Students"
+    @course=Course.find(params[:id])
+    @students= @course.students
+    render 'show_students'
+  end
+
+
+  def quizzes
+    @title= "Conducted Quizzes"
+    @course=Course.find(params[:id])
+    @quizzes= @course.quizzes
+  end
+
+  
+
 end
