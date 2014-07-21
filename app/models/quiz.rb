@@ -6,4 +6,5 @@ class Quiz < ActiveRecord::Base
 
   accepts_nested_attributes_for :questions, :reject_if => lambda {|a| a[:content].blank? }, :allow_destroy => true
   default_scope order: 'quizzes.created_at DESC'
+  
 end

@@ -14,7 +14,7 @@
   <div class="field">
     <p>
       <%= f.label :name %><br />
-      <%= f.text_field :name %>
+      <%= f.text_field :name, :class => "quiz-input-class" %>
     </p>
     <%= f.fields_for :questions do |builder| %>
       <%= render "question_fields", :f => builder %>

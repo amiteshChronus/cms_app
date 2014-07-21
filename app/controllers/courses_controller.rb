@@ -109,6 +109,9 @@ class CoursesController < ApplicationController
     @title= "Registered Students"
     @course=Course.find(params[:id])
     @students= @course.students
+    if !@students.any?
+      flash[:notice]= "Sorry! No studnets registered in this course"
+    end
     render 'show_students'
   end
 

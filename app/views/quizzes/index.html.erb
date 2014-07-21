@@ -1,8 +1,6 @@
 <h1>Listing quizzes</h1>
 
-<% if isProf? %>
-<%= link_to 'New Quiz', new_quiz_path, method: :get , :class => "btn btn-primary"%>
-<% end %>
+
 <table>
 
 <% if @quizzesHash.empty? %>
@@ -10,13 +8,13 @@
 <% else %>
    <% @quizzesHash.each do |course, quizzes| %>
     <h3> <%= course.name %> </h3>
-
+    
+    <% if isProf? %>
+		<%= link_to 'New Quiz', new_quiz_path(:course_id=>course.id), method: :get , :class => "btn btn-primary"%>
+	<% end %>
     <ul class="courses">
-    
-      <%= render quizzes%>
-    
-  </ul>
-     
+    	<%= render quizzes%>
+  	</ul>
      
     <% end %>
   <% end %>

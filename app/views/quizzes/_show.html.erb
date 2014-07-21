@@ -7,7 +7,7 @@
 </p>
 <ol>
 <% for question in quiz.questions %>
-	<li> <%= question.content%></li>
+	<li><b> <%= question.content%></b></li>
 	<ul>
 	<% for option in question.options %>
 		<li> <%= option.description %></li>

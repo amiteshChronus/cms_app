@@ -12,28 +12,26 @@ class QuizzesController < ApplicationController
     elsif isStudent?
       @courses= current_user.registered_courses
       @courses.each do |course|
-        if course.quizzes.any?
+        # if course.quizzes.any?
           @quizzesHash[course]=course.quizzes
-        end
+        # end
       end
     elsif isProf?
       @courses= current_user.offered_courses
       @courses.each do |course|
-        if course.quizzes.any?
+        # if course.quizzes.any?
           @quizzesHash[course]=course.quizzes
-        end
+        # end
       end
     end
 
-    respond_to do |format|
-      format.html # index.html.erb
-      format.json { render json: @quizzes }
-    end
   end
 
   # GET /quizzes/1
   # GET /quizzes/1.json
   def show
+
+    @title="Quiz"
     @quiz = Quiz.find(params[:id])
     @havePermission=false
 
@@ -42,7 +40,7 @@ class QuizzesController < ApplicationController
     elsif isProf?
       @courses= current_user.offered_courses
     end
-    @courses.each do |course|
+    @courses.try(:each) do |course|
         if course.quizzes.include? @quiz
           @havePermission=true
         end
@@ -136,7 +134,7 @@ class QuizzesController < ApplicationController
       @answerHash =Hash.new
 
       @questions.each do |question|
-          @correct_option= question.options.where(:correct => true).first.id 
+          @correct_option= question.options.where(:correct => true).first.id
           @answerHash[question]= question.options.where(:correct => true).first.description    
           if "#{@correct_option}" == params["questions"]["#{question.id}"]["option"]
             @score=@score + 2

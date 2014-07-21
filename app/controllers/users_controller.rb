@@ -1,7 +1,7 @@
 class UsersController < ApplicationController
-  before_filter :signed_in_user, only: [:edit, :update, :index,:create_prof,:new_prof,:show, :new]
+  before_filter :signed_in_user, only: [:edit, :update, :index,:create_prof,:new_prof,:show]
   before_filter :correct_user,  only: [:edit, :update]
-  before_filter :admin_user, only: [:create_prof,:new_prof]
+  
 
   # GET /users
   # GET /users.json
@@ -20,9 +20,6 @@ class UsersController < ApplicationController
       flash[:notice]= "You don't have permission to browse all users"
       redirect_to courses_path
     end
-      
-
-
   end
 
   # GET /users/1
@@ -47,14 +44,13 @@ class UsersController < ApplicationController
   # GET /users/new.json
   def new
 
-    if !isAdmin?
+    if signed_in? && !isAdmin?
       sign_out
       redirect_to signup_url
-    else
-      redirect_to '/new_prof'
-
+    elsif signed_in? && isAdmin?
+      redirect_to "/new_prof"
     end
-
+    @title= "Sign Up"
     @user = User.new
 
     
@@ -66,13 +62,13 @@ class UsersController < ApplicationController
       flash[:notice]= "Only professors are allowed to create course"
       redirect_to courses_path
     end
+
     @course= Course.new
     
   end
 
 
   def create_course
-
     @user = current_user
     @course = Course.new(params[:course])
     respond_to do |format|
@@ -89,10 +85,14 @@ class UsersController < ApplicationController
 
 
   def new_prof
-    @prof = User.new
-    respond_to do |format|
-      format.html # new_prof.html.erb
+    if !isAdmin?
+      # flash[:notice]= "You don't have permission to browse all users"
+      flash[:notice]= "Only admin can create new professor account."
+      redirect_to courses_path
     end
+    @title ="Create new professor"
+    @prof = User.new
+    
   end
 
   # GET /users/1/edit
@@ -103,6 +103,7 @@ class UsersController < ApplicationController
   # POST /users
   # POST /users.json
   def create
+
     @user = User.new(params[:user])
     @user.role=3
     respond_to do |format|
@@ -119,6 +120,10 @@ class UsersController < ApplicationController
 
 
   def create_prof
+    if !isAdmin?
+      flash.now[:notice]= "Only admin can create new professor account."
+      redirect_to courses_path
+    end
     @user = current_user
     @prof = User.new(params[:user])
     password=random_string(6)
@@ -158,7 +163,7 @@ class UsersController < ApplicationController
   # DELETE /users/1.json
   def destroy
     User.find(params[:id]).destroy
-    flash[:success] = "User destroyed."
+    flash[:success] = "Professor account destroyed."
     redirect_to users_path
   end
 
