@@ -1,2 +1,26 @@
-<%= form_for @quiz, as: :post , url: quiz_path(@quiz), method: :patch do |f| %>
-<%end%>
+<li>
+    <%= link_to quiz.name, quiz%><br/>
+    <b>Created:</b> <%= time_ago_in_words(quiz.created_at) %> ago <br/>
+    <% if !isProf? %>
+        
+    <%end %>
+    <% if isProf? %>
+      <b>Class Average:</b> <%=quiz_average(quiz) %> <br/>
+        <%= link_to 'Edit', edit_quiz_path(quiz) %><br/>
+        <%= link_to 'Destroy', quiz, method: :delete, data: { confirm: 'Are you sure?' }%> <br/>
+    <%end%>
+
+    <% if isStudent? %>
+         <% if current_user.attempts.where(:quiz_id => quiz.id).any? %>
+              <b>Your score:</b> <%=current_user.attempts(:quiz_id => quiz.id).first.marks %> 
+              <b>Class Average:</b> <%=quiz_average(quiz) %> 
+            <% else%>
+              <%= link_to 'Attempt', quiz_path(quiz) %>
+            <% end %>
+    <% end %>
+ 
+    
+</li>
+
+
+        

@@ -1,24 +1,50 @@
-<p id="notice"><%= notice %></p>
-
-<p>
-  <b>Name:</b>
-  <%= @quiz.name %>
-</p>
 <ol>
-<% for question in @quiz.questions %>
-	<li> <%= question.content%></li>
-	<ul>
-	<% for option in question.options %>
-		<li> <%= option.description %></li>
-	<%end%>
-	</ul>
 
-<%end%>
-</ol>
+<%= simple_form_for @quiz, :url => attempt_quiz_path(@quiz) do |f| %>
+  <fieldset>
+    <legend>Quiz <%= @quiz.name.capitalize %></legend>
+
+    <div>
+    <% if isStudent? &&  current_user.attempts.where(:quiz_id => @quiz.id).any?%>
+
+    <p class="notice">
+    You have attempted this quiz. Your score is  <%= current_user.attempts(:quiz_id => @quiz.id).first.marks %> and class average is <%= quiz_average(@quiz) %>
+    
+    </p>
+    <%end%>
+    </div>
+    <ol>
+    <% @quiz.questions.each do |question| %>
+      <%= simple_fields_for "questions[#{question.id}]" do |builder| %>
+        
+          <li>
+            <p><%= question.content %></p>
+          
+             <%= builder.input :option, :collection => question.options, :label_method => :description, :as => :radio_buttons %>
+          
+          </li>
+        
+      <% end %>
+    <% end %>
+  </ol>
+    <div class="form-actions">
+
+			<% if isStudent? && !current_user.attempts.where(:quiz_id => @quiz.id).any? %>
+				<%= f.submit "Submit Quiz", :class => "btn btn-primary" %>
+				
+			<%end%>
+
+		    <% if isProf? %>
+				<%= link_to 'Edit', edit_quiz_path(@quiz) , class: "btn btn-primary" %> 
+				<%= link_to 'Destroy', @quiz, :confirm => 'Are you sure?', :method => :delete ,class: "btn btn-primary"%> 
+			<% end %>
+
+			<%= link_to 'Back', quizzes_path, class: "btn btn-primary" %>
+
+	</div>
+    
+  </fieldset>
+<% end %>
 
 
 
-
-<%= link_to 'Edit', edit_quiz_path(@quiz) %> |
-<%= link_to 'Destroy', @quiz, :confirm => 'Are you sure?', :method => :delete %> |
-<%= link_to 'Back', quizzes_path %>

@@ -1,6 +1,12 @@
 CmsApp::Application.routes.draw do
+  get "password_resets/new"
+
   resources :questions
-  resources :quizzes
+  resources :quizzes do
+    member do
+      put :attempt
+    end
+  end
   resources :courses  do
     member do
       get :students, :quizzes
@@ -17,12 +23,15 @@ CmsApp::Application.routes.draw do
   match '/signin', to: 'sessions#new'
   match '/signout', to: 'sessions#destroy', via: :delete
   match '/new_prof', to: 'users#new_prof'
+
   match '/create_prof', to: 'users#create_prof'
   match '/new_course' , to: 'users#new_course'
   match '/create_course', to: 'users#create_course'
   match '/courses/new', to: 'users#new_course'
 
+  match '/my_courses', to: 'courses#my_course'
 
+  match '*a', :to => 'errors#routing'
 
   # The priority is based upon order of creation:
   # first created -> highest priority.

@@ -1,19 +1,19 @@
-<h1>Listing courses</h1>
 
-<table>
-  <tr>
-    <th>Name</th>
-    <th></th>
-  </tr>
+<% provide(:title, @title) %>
+<h1><%=@title%></h1> <% if isProf? %> <%= link_to "Create New Course", '/new_course', class: "btn btn-primary"%><%end%>
+<%= will_paginate %>
 
-<% @courses.each do |course| %>
-  <tr>
-    <td><%= link_to  course.name, course %></td>
- 
-    <td><%= link_to 'Destroy', course, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-  </tr>
-<% end %>
-</table>
+  <ul class="courses">
+    
+      <%= render @courses%>
+    
+  </ul>
 
-<br />
+<%= will_paginate %>
+
+
+
+
+
+
 

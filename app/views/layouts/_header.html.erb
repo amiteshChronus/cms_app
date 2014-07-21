@@ -10,18 +10,16 @@
 
             <% if isAdmin? %>
 
-            <li><%= link_to "Profs", current_user %></li>
-            <li><%= link_to "Create Profs", '/new_prof' %></li>
-            
-          
+            <li><%= link_to "Profs", users_path %></li>
+              
             <% elsif isProf?%>
               <li><%= link_to "Courses", courses_path %></li>
-              <li><%= link_to "Create Course", '/new_course' %></li>
+              <!-- <li><%= link_to "Create Course", '/new_course' %></li> -->
                      
 
             <% elsif isStudent?%>
               <li><%= link_to "Courses", courses_path %></li>
-              <li><%= link_to "Registered Courses", '#' %></li>
+              <li><%= link_to "Registered Courses", '/my_courses' %></li>
             <% end %>                      
 
             <li id="fat-menu" class="dropdown">

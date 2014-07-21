@@ -1,14 +1,19 @@
 class CoursesController < ApplicationController
+  before_filter :signed_in_user
   # GET /courses
   # GET /courses.json
   def index
     @current_user=current_user
     if isAdmin?
-      @courses = Course.all
+      @courses = Course.paginate(page: params[:page])
     elsif isProf?
-      @courses= @current_user.offered_courses
-    elsif isStudnet?
-      @courses= @current_user.registered_courses
+      @title = "All Courses Offered"
+      @courses= @current_user.offered_courses.paginate(page: params[:page])
+    elsif isStudent?
+      @title = "All Courses Offered"
+      @courses= Course.paginate(page: params[:page])
+
+      # @courses= @current_user.registered_courses.paginate(page: params[:page])
     else
       redirect_to root_url
     end
@@ -16,6 +21,18 @@ class CoursesController < ApplicationController
     respond_to do |format|
       format.html # index.html.erb
       format.json { render json: @courses }
+    end
+  end
+
+  def my_course
+    if isStudent?
+      @title = "Courses Registered"
+      @courses= current_user.registered_courses.paginate(page: params[:page])      
+    elsif isProf?
+      @title = "All Courses Offered"
+      @courses= current_user.offered_courses.paginate(page: params[:page])
+    else
+      redirect_to root_url
     end
   end
 
@@ -32,17 +49,15 @@ class CoursesController < ApplicationController
   # GET /courses/new
   # GET /courses/new.json
   def new
-    @course = current_user.courses.build
-
-    respond_to do |format|
-      format.html # new.html.erb
-      format.json { render json: @course }
-    end
+    redirect_to '/new_course'
   end
 
   # GET /courses/1/edit
   def edit
     @course = Course.find(params[:id])
+    if !current_user.offered_courses.include? @course
+      redirect_to root_url
+    end
   end
 
   # POST /courses
@@ -102,6 +117,9 @@ class CoursesController < ApplicationController
     @title= "Conducted Quizzes"
     @course=Course.find(params[:id])
     @quizzes= @course.quizzes
+    if !@quizzes.any?
+      flash.now[:notice] = "This course have no quiz yet!"
+    end
   end
 
   

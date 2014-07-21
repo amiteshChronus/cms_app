@@ -1,15 +1,19 @@
 <% provide(:title, @title) %>
+
+
 <div class="span8">
     <h3><%= @title %></h3>
+    <% if isProf? %>
     <%= link_to "New Quiz", new_quiz_path(:course_id => @course.id), class: "btn btn-large btn-primary"%>
-    
+    <%end%>
     <% if @quizzes.any? %>
       
+      <ul class="courses">
+    
+      <%= render @quizzes%>
+    
+  </ul>
 
-      <ul class="quiz">
-
-       	 <%= render :partial => "quizzes/show" %>
-      </ul>
       
     <% end %>
   </div>

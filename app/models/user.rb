@@ -1,16 +1,17 @@
 class User < ActiveRecord::Base
   attr_accessible :email, :name, :password, :password_confirmation, :role, :remember_token
+  before_create {generate_token(:remember_token)}
   has_secure_password
 
   before_save { |user| user.email = email.downcase }
-  before_save :create_remember_token
+  
   
   has_many :offerings, foreign_key: "instructor_id", dependent: :destroy
   has_many :registrations, foreign_key: "student_id", dependent: :destroy
 
   has_many :offered_courses, through: :offerings , source: :course
   has_many :registered_courses, through: :registrations, source: :course
-  has_many :attempts
+  has_many :attempts, foreign_key: "student_id", dependent: :destroy
 
   validate :name, presence: true, length: {maximum: 50}
   VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
@@ -41,5 +42,18 @@ class User < ActiveRecord::Base
       self.remember_token = SecureRandom.urlsafe_base64
     end
 
-    
+    def generate_token(column)
+      begin
+        self[column] = SecureRandom.urlsafe_base64
+      end while User.exists?(column => self[column])
+    end
+
+    def send_password_reset
+      generate_token(:password_reset_token)
+      self.password_reset_sent_at = Time.zone.now
+      save!
+      Emailer.password_reset(self).deliver
+    end
+
+
 end

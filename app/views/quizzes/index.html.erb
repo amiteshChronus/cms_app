@@ -1,23 +1,26 @@
 <h1>Listing quizzes</h1>
 
-<table>
-  <tr>
-    <th>Name</th>
-    <th></th>
-    <th></th>
-    <th></th>
-  </tr>
-
-<% @quizzes.each do |quiz| %>
-  <tr>
-    <td><%= quiz.name %></td>
-    <td><%= link_to 'Show', quiz %></td>
-    <td><%= link_to 'Edit', edit_quiz_path(quiz) %></td>
-    <td><%= link_to 'Destroy', quiz, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-  </tr>
+<% if isProf? %>
+<%= link_to 'New Quiz', new_quiz_path, method: :get , :class => "btn btn-primary"%>
 <% end %>
+<table>
+
+<% if @quizzesHash.empty? %>
+  <h3> You don't have any quiz </h3>
+<% else %>
+   <% @quizzesHash.each do |course, quizzes| %>
+    <h3> <%= course.name %> </h3>
+
+    <ul class="courses">
+    
+      <%= render quizzes%>
+    
+  </ul>
+     
+     
+    <% end %>
+  <% end %>
+
 </table>
 
 <br />
-
-<%= link_to 'New Quiz', new_quiz_path, method: :get %>

@@ -1,0 +1,23 @@
+<h3> Your score is <%= @score %>  and class average is <%= quiz_average(@quiz)%> </h3>
+
+    <legend>Solution for <%= @quiz.name.capitalize %></legend>
+
+    <ol>
+    <% @quiz.questions.each do |question| %>
+      
+            <li><b><%= question.content %></b></li>
+            <p> <b>Answer:</b> <%= @answerHash[question]%>
+
+<!--              <%= question.options.where(:correct => true).first.description %> </p>
+          <% question.options.where(:correct => true).each do |option|%>
+             <p> Ans <%= option.description %></p>
+          <%end%>
+ -->          
+        
+    <% end %>
+</ol>
+    
+
+
+
+

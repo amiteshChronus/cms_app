@@ -1,0 +1,28 @@
+<li>
+	<%= link_to course.name, course%><br/>
+    Created: <%= time_ago_in_words(course.created_at) %> ago <br/>
+    <% if !isProf? %>
+        Instructor <%= link_to course.instructors.first.name,  user_path(:id=> course.instructors.first.id) %><br/>
+    <%end %>
+	<% if isProf? %>
+        <%= link_to "Students(#{course.students.count})", students_course_path(course) %>
+        <%= link_to "Quizzes(#{course.quizzes.count})", quizzes_course_path(:id => course.id) %>
+        <%= link_to 'Edit', edit_course_path(course) %>
+        <%= link_to 'Destroy', course, method: :delete, data: { confirm: 'Are you sure?' } %>
+    <%end%>
+
+    <% if isStudent? %>
+        <% if current_user.registered?(course) %>
+        <%= link_to "Students(#{course.students.count})", students_course_path(course) %><br/>
+        <%= link_to "Quizzes(#{course.quizzes.count})", quizzes_course_path(:id => course.id) %><br/>
+        <%end%>
+        <%= render 'register_form', :course => course  %>
+    <% end %>
+
+    
+    
+</li>
+
+		
+
+		

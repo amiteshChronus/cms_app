@@ -1,18 +1,27 @@
 class UsersController < ApplicationController
-  before_filter :signed_in_user, only: [:edit, :update, :index]
+  before_filter :signed_in_user, only: [:edit, :update, :index,:create_prof,:new_prof,:show, :new]
   before_filter :correct_user,  only: [:edit, :update]
-  before_filter :admin_user, only: [:create_prof]
+  before_filter :admin_user, only: [:create_prof,:new_prof]
 
   # GET /users
   # GET /users.json
   def index
     if isAdmin?
-      @users = User.where('role' => 2)
+      @title= "Listing All Professors"
+      @users = User.where('role' => 2).paginate(page: params[:page])
+      if(!@users.any?)
+        flash[:notice]= "No professor on CMS. To create a new professor click on Create New Professor"
+      end
       respond_to do |format|
         format.html # index.html.erb
         format.json { render json: @users }
       end
+    else
+      flash[:notice]= "You don't have permission to browse all users"
+      redirect_to courses_path
     end
+      
+
 
   end
 
@@ -23,36 +32,47 @@ class UsersController < ApplicationController
 
   def show
     @user = User.find(params[:id])
-    if isAdmin?
-      @users =User.where('role' => 2)
-    elsif isProf?
-      @courses= @user.offered_courses
-    elsif isStudent?
-      @courses= Course.all
-    end  
+
+    # @user = User.find(params[:id])
+    # if isAdmin?
+    #   @users =User.where('role' => 2)
+    # elsif isProf?
+    #   @courses= @user.offered_courses
+    # elsif isStudent?
+    #   @courses= Course.all
+    # end  
   end
 
   # GET /users/new
   # GET /users/new.json
   def new
+
+    if !isAdmin?
+      sign_out
+      redirect_to signup_url
+    else
+      redirect_to '/new_prof'
+
+    end
+
     @user = User.new
 
-    respond_to do |format|
-      format.html # new.html.erb
-      format.json { render json: @user }
-    end
+    
   end
 
 
   def new_course
-    @course= Course.new
-    respond_to do |format|
-      format.html # new_prof.html.erb
+    if !isProf?
+      flash[:notice]= "Only professors are allowed to create course"
+      redirect_to courses_path
     end
+    @course= Course.new
+    
   end
 
 
   def create_course
+
     @user = current_user
     @course = Course.new(params[:course])
     respond_to do |format|
@@ -101,13 +121,14 @@ class UsersController < ApplicationController
   def create_prof
     @user = current_user
     @prof = User.new(params[:user])
-    password="bhinder" #rand(6**length).to_s(6)""
+    password=random_string(6)
     @prof.password=password
     @prof.password_confirmation=password
     @prof.role=2
+    Emailer.send_mail(@prof).deliver
     respond_to do |format|
       if @prof.save
-        format.html { redirect_to current_user, notice: 'New prof created' }
+        format.html { redirect_to users_path, notice: 'New prof created' }
         format.json { render json: current_user, status: :created, location: current_user }
       else
         format.html { render action: "new_prof" }
@@ -143,16 +164,11 @@ class UsersController < ApplicationController
 
   private 
 
-    def signed_in_user
-      unless  signed_in?
-        store_location
-        redirect_to signin_url, notice: "Please sign in." 
-      end
-    end
+    
 
     def correct_user
       @user = User.find(params[:id])
-      redirect_to(root_url) unless current_user?(@user)
+      redirect_to(user_path(current_user)) unless current_user?(@user)
     end
 
     def admin_user
@@ -167,6 +183,11 @@ class UsersController < ApplicationController
       redirect_to(root_url) unless isStudent?
     end
 
-    
+    def random_string(length=6)
+      chars = 'abcdefghjkmnpqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ0123456789'
+      password = ''
+      length.times { password << chars[rand(chars.size)] }
+      password
+    end
 
 end

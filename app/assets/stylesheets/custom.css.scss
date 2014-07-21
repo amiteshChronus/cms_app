@@ -115,3 +115,55 @@ input {
   @extend .control-group;
   @extend .error;
 }
+
+
+/* microposts */
+
+.users {
+  list-style: none;
+  margin: 10px 0 0 0;
+  
+  li {
+    padding: 16px 0;
+    border-top: 1px solid #e8e8e8;
+  }
+  a{
+    font-size: xx-large;
+  }
+}
+.big_link{
+  font-size: 400%
+
+}
+
+.courses {
+  list-style: none;
+  margin: 10px 0 0 0;
+  
+  li {
+    padding: 16px 0;
+    border-top: 1px solid #e8e8e8;
+  }
+   
+}
+
+
+.content {
+  display: block;
+}
+.timestamp {
+  color: $grayLight;
+}
+.gravatar {
+  float: left;
+  margin-right: 10px;
+}
+
+aside {
+  textarea {
+    height: 100px;
+    margin-bottom: 5px;
+  }
+}
+
+ 

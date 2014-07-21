@@ -1,7 +1,22 @@
 
-<h1>Listing All Professors</h1>
+<% provide(:title, @title) %>
+<% if isAdmin?%>
+<h1><%=@title%></h1> <%= link_to "Create New Professor", '/new_prof', class: "btn btn-primary"%>
+<%end%>
+<% if !@users.nil? %>
 
-<table>
+<%= will_paginate %>
+
+  <ul class="users">
+    
+      <%= render @users%>
+    
+  </ul>
+
+<%= will_paginate %>
+
+<%end%>
+<!-- <table>
   <tr>
     <th>Name</th>
     <th>Email</th>
@@ -9,18 +24,5 @@
     <th></th>
     <th></th>
   </tr>
-
-<% @users.each do |user| %>
-  <tr>
-    <td><%= user.name %></td>
-    <td><%= user.email %></td>
-    <td><%= link_to 'Show', user %></td>
-    <td><%= link_to 'Edit', edit_user_path(user) %></td>
-    <td><%= link_to 'Destroy', user, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-  </tr>
-<% end %>
-</table>
-
 <br />
 
-<%= link_to 'New User', new_user_path %>

@@ -10,7 +10,7 @@
     </div>
   <% end %>
 
-<%= form_for @quiz, :url => quizzes_path(:course_id => @course_id) do |f| %>
+<%= form_for @quiz, :url => quiz_path, :method => :put do |f| %>
   <div class="field">
     <p>
       <%= f.label :name %><br />

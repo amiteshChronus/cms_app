@@ -3,12 +3,13 @@
 <table>
 	<tr>
 		<td>
-			<h1><%= @course.name %></h1>
+			<%= @course.name %>
 		</td>
+
 		<td>
-		</td>
- 		<td>
- 			<h3><%= link_to '(Edit)', edit_course_path(@course) %></h3>
+			<% if isProf? %>
+ 			<%= link_to 'Edit', edit_course_path(@course), :class => "btn btn-primary" %>
+ 			<% end %>
  		</td>	 
 </table>
 <a href="<%= students_course_path(@course) %>"> Students(   <%= @course.students.count %> ) </a> |
