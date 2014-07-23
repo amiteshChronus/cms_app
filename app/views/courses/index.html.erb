@@ -1,6 +1,6 @@
 
 <% provide(:title, @title) %>
-<h1><%=@title%></h1> <% if isProf? %> <%= link_to "Create New Course", '/new_course', class: "btn btn-primary"%><%end%>
+<h1><%=@title%></h1> <% if isProf? %> <%= link_to "Create New Course", '/new_course', class: "btn btn-info"%><%end%>
 <%= will_paginate %>
 
   <ul class="courses">

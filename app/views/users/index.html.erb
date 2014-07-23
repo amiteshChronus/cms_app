@@ -1,7 +1,7 @@
 
 <% provide(:title, @title) %>
 <% if isAdmin?%>
-<h1><%=@title%></h1> <%= link_to "Create New Professor", '/new_prof', class: "btn btn-primary"%>
+<h1><%=@title%></h1> <%= link_to "Create New Professor", '/new_prof', class: "btn btn-info"%>
 <%end%>
 <% if !@users.nil? %>
 

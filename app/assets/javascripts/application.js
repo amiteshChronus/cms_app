@@ -17,6 +17,7 @@
 
 
 function remove_fields(link) {
+	jQuery(link).parent().value = "1";
 	jQuery(link).parent().remove()
   // jQuery(link).prev("input[type=hidden]").value = "1";
   // jQuery(link).up(".fields").hide();

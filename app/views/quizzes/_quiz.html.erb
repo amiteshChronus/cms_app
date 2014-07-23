@@ -1,13 +1,15 @@
 <li>
     <%= link_to quiz.name, quiz%><br/>
-    <b>Created:</b> <%= time_ago_in_words(quiz.created_at) %> ago <br/>
+    <span class="timestamp"><b>Created:</b> <%= time_ago_in_words(quiz.created_at) %> ago </span><br/>
     <% if !isProf? %>
         
     <%end %>
     <% if isProf? %>
       <b>Class Average:</b> <%=quiz_average(quiz) %> <br/>
-        <%= link_to 'Edit', edit_quiz_path(quiz) %><br/>
-        <%= link_to 'Destroy', quiz, method: :delete, data: { confirm: 'Are you sure?' }%> <br/>
+      <div class="btn-group">
+        <%= link_to 'Edit', edit_quiz_path(quiz), :class=> "btn btn-info" %>
+        <%= link_to 'Destroy', quiz, :class=> "btn btn-info", method: :delete, data: { confirm: 'Are you sure?' }%> <br/>
+       </div> 
     <%end%>
 
     <% if isStudent? %>
@@ -15,7 +17,7 @@
               <b>Your score:</b> <%=current_user.attempts(:quiz_id => quiz.id).first.marks %> 
               <b>Class Average:</b> <%=quiz_average(quiz) %> 
             <% else%>
-              <%= link_to 'Attempt', quiz_path(quiz) %>
+              <%= link_to 'Attempt', quiz_path(quiz), :class=> "btn btn-info" %>
             <% end %>
     <% end %>
  

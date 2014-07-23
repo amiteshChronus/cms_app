@@ -1,18 +1,27 @@
-<p id="notice"><%= notice %></p>
+
 
 <table>
 	<tr>
 		<td>
-			<h3>Course Name</h3> <%= " " + @course.name %>
+			<h3> <%= " " + @course.name %></h3>
 		</td>
 
 		<td>
 			<% if isProf? %>
- 			<%= link_to 'Edit', edit_course_path(@course), :class => "btn btn-primary" %>
+ 			<%= link_to 'Edit', edit_course_path(@course), :class => "btn btn-info" %>
  			<% end %>
  		</td>	 
 </table>
-<a href="<%= students_course_path(@course) %>"> Students(   <%= @course.students.count %> ) </a> |
-<!-- <a href="<%= quizzes_course_path(:id => @course.id) %>"> Quizzes(   <%= @course.quizzes.count %> ) </a> -->
-<%= link_to("Quizzes(#{@course.quizzes.count})",quizzes_course_path(:id => @course.id))%>
+
+
+<div class="btn-group">
+        <%= link_to students_course_path(@course), :class => "btn btn-info" do %>
+        Students
+        <span class="badge"> <%=@course.students.count%></span>
+        <% end %>
+        <%= link_to quizzes_course_path(:id => @course.id), :class => "btn btn-info" do %>
+        Quizzes
+        <span class="badge"> <%=@course.quizzes.count%></span>
+        <% end %>
+</div>
 

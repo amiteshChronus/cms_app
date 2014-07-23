@@ -1,7 +1,9 @@
 <div class="fields">
 
-  <%= f.label :content, "Question" %><br />
-  <%= link_to_remove_fields "remove", f %><br />
+  <%= f.label :content, "Question" %>
+  <% if @quiz.id.nil?%>
+  <%= link_to_remove_fields "remove question", f %><br />
+  <%end%>
   <%= f.text_area :content, :rows => 3, :class => "quiz-input-class" %><br />
 
 <%= f.fields_for :options do |builder| %>

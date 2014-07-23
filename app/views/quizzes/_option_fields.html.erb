@@ -2,8 +2,9 @@
 <p class="fields">
     <%= f.label :description, "Answer" %>
   <table><tr><td> <%= f.text_field :description %> </td><td> <%= f.check_box :correct%></td></tr> </table>
-
+  <% if @quiz.id.nil?%>
     <%= link_to_remove_fields "remove" , f%>
+   <% end %>
   </p>
 </div>
 

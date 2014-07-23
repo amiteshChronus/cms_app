@@ -6,6 +6,7 @@ class QuizzesController < ApplicationController
   # GET /quizzes
   # GET /quizzes.json
   def index
+    @title='Quizzes'
     @quizzesHash = Hash.new
     if isAdmin?
       redirect_to root_url
@@ -40,7 +41,7 @@ class QuizzesController < ApplicationController
     elsif isProf?
       @courses= current_user.offered_courses
     end
-    @courses.try(:each) do |course|
+    @courses.each do |course|
         if course.quizzes.include? @quiz
           @havePermission=true
         end
@@ -55,6 +56,7 @@ class QuizzesController < ApplicationController
   # GET /quizzes/new
   # GET /quizzes/new.json
   def new
+    @title="New Quiz"
     @quiz = Quiz.new
     @course_id= params[:course_id]
     3.times do
@@ -73,15 +75,15 @@ class QuizzesController < ApplicationController
   # POST /quizzes.json
   def create
     @quiz = Quiz.new(params[:quiz])
-    
-
+    @title="New Quiz"
     @quiz.course_id=params[:course_id]
+    @course_id=params[:course_id]
     respond_to do |format|
       if @quiz.save
         format.html { redirect_to @quiz, notice: 'Quiz was successfully created.' }
         format.json { render json: @quiz, status: :created, location: @quiz }
       else
-        format.html { render action: "new" }
+        format.html { render action: "new", :course_id => @course_id}
         format.json { render json: @quiz.errors, status: :unprocessable_entity }
       end
     end

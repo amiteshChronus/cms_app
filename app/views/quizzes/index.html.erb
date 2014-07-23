@@ -1,3 +1,4 @@
+<% provide(:title, @title) %>
 <h1>Listing quizzes</h1>
 
 
@@ -10,7 +11,7 @@
     <h3> <%= course.name %> </h3>
     
     <% if isProf? %>
-		<%= link_to 'New Quiz', new_quiz_path(:course_id=>course.id), method: :get , :class => "btn btn-primary"%>
+		<%= link_to 'New Quiz', new_quiz_path(:course_id=>course.id), method: :get , :class => "btn btn-info"%>
 	<% end %>
     <ul class="courses">
     	<%= render quizzes%>

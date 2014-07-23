@@ -130,16 +130,19 @@ class UsersController < ApplicationController
     @prof.password=password
     @prof.password_confirmation=password
     @prof.role=2
-    Emailer.send_mail(@prof).deliver
+    
     respond_to do |format|
       if @prof.save
+        Emailer.send_mail(@prof).deliver
         format.html { redirect_to users_path, notice: 'New prof created' }
         format.json { render json: current_user, status: :created, location: current_user }
+
       else
         format.html { render action: "new_prof" }
         format.json { render json: @prof.errors, status: :unprocessable_entity }
       end
     end
+
   end 
 
   # PUT /users/1
